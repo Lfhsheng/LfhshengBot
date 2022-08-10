@@ -7,6 +7,13 @@
 python main.py
 ```
 记得在`main.py`里填上机器人的令牌😏
+## 配置自定义词语回复
+在`bot.infinity_polling()`上方添加如下代码：
+```python
+@bot.message_handler(regexp='<需要检测的词语>')
+def echo_<需要检测的词语>(message):
+    bot.reply_to(message,"<需要回复的词语>")
+```
 ## 命令
 `/tosscoin`：抛硬币
 

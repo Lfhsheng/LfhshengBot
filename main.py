@@ -1,6 +1,8 @@
+from tokenize import Token
 from telebot import *
 from random import randint
-token = "5588904129:AAHmOmeN2hfllUYC3jU6ZPcoxkZD40QKVOk"
+import token
+token = "在这填上令牌"
 pingList = ["喵喵喵","我还活着……","呜呜呜","挠挠挠","伸爪ing"]
 bot = TeleBot(token, parse_mode=None)
 @bot.message_handler(commands=["tosscoin"])
@@ -16,7 +18,13 @@ def send_meow(message):
 @bot.message_handler(commands=["ping"])
 def send_ping(message):
     bot.reply_to(message,pingList[randint(0,len(pingList)-1)])
-#@bot.message_handler(func=lambda message: True) 
-#def echo_all(message):
-#    bot.reply_to(message,"喵！")
+@bot.message_handler(regexp='qaq')
+def echo_Qaq(message):
+    bot.reply_to(message,"喵！")
+@bot.message_handler(regexp='紫砂')
+def echo_紫砂(message):
+    bot.reply_to(message,"不要！")
+@bot.message_handler(regexp='Emo酱')
+def echo_Emo酱(message):
+    bot.reply_to(message,"Emo酱主义万岁！")
 bot.infinity_polling()

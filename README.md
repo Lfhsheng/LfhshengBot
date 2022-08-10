@@ -8,12 +8,12 @@ python main.py
 ```
 记得在`main.py`里填上机器人的令牌😏
 ## 配置自定义词语回复
-在`bot.infinity_polling()`上方添加如下代码：
+在`checkKeyWord`下加入
 ```python
-@bot.message_handler(regexp='<需要检测的词语>')
-def echo_<需要检测的词语>(message):
-    bot.reply_to(message,"<需要回复的词语>")
+elif "<检测词语>" in message.text:
+    bot.reply_to(message,"<回复>")
 ```
+如果`if`被删除，则更改`elif`为`if`
 ## 命令
 `/tosscoin`：抛硬币
 

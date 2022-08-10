@@ -1,8 +1,8 @@
-from tokenize import Token
 from telebot import *
 from random import randint
 token = "在这填上令牌"
 pingList = ["喵喵喵","我还活着……","呜呜呜","挠挠挠","伸爪ing"]
+wordList = ["人生无常，大肠包小肠","喵你喵！","我在這裡下詛咒，病夫在30歲以前一定會結婚","有時間催促女裝不如寫一兩篇稿子"]
 bot = TeleBot(token, parse_mode=None)
 @bot.message_handler(commands=["tosscoin"])
 def send_coin(message):
@@ -17,6 +17,9 @@ def send_meow(message):
 @bot.message_handler(commands=["ping"])
 def send_ping(message):
     bot.reply_to(message,pingList[randint(0,len(pingList)-1)])
+@bot.message_handler(commands=["word"])
+def send_word(message):
+    bot.reply_to(message,wordList[randint(0,len(wordList)-1)])
 @bot.message_handler(func=lambda message: True)
 def checkKeyWord(message):
     print(message.text)

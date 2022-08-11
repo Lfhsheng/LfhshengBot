@@ -1,6 +1,8 @@
 # 关于这个~~破~~机器人
 实例：**泠风寒声の小机器人：[@Lfhsheng_bot](https://t.me/Lfhsheng_bot)**
 
+主人：[@Lfhsheng](https://t.me/Lfhsheng)
+
 **欢迎~~调戏~~**
 ## 使用
 ```python

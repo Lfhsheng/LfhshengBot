@@ -8,12 +8,7 @@ python main.py
 ```
 记得在`main.py`里填上机器人的令牌😏
 ## 配置自定义词语回复
-在`checkKeyWord`下加入
-```python
-elif "<检测词语>" in message.text:
-    bot.reply_to(message,"<回复>")
-```
-如果`if`被删除，则更改`elif`为`if`
+按[Python List格式](https://www.w3school.com.cn/python/python_lists.asp)修改`keyWordList`即可。
 ## 命令
 `/tosscoin`：抛硬币
 

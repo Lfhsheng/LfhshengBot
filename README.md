@@ -5,6 +5,10 @@
 
 **欢迎~~调戏~~**
 ## 使用
+```shell
+pip install pyTelegramBotAPI
+pip install zhconv
+```
 ```python
 python main.py
 ```

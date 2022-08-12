@@ -2,6 +2,7 @@ from telebot import *
 from random import randint,choice
 from json import loads
 from requests import get
+from zhconv import convert
 token = "在这填上令牌"
 pingList = ["喵喵喵","我还活着……","呜呜呜","挠挠挠","伸爪ing"]
 keyWordList = [
@@ -14,7 +15,9 @@ keyWordList = [
     ["EMO酱","黄豆酱真好吃😋"],
     ["咕谷酱","咕咕咕！"],
     ["泠风寒声","泠风寒声翻车车~"],
-    ["冷风寒声","是泠风寒声！"]
+    ["冷风寒声","是泠风寒声！"],
+    ["他妈","他爸"],
+    ["泠风寒声酱","谁在叫我（"]
     ]
 def word():
     jsonWord = get("https://v1.hitokoto.cn/")
@@ -43,7 +46,8 @@ def send_word(message):
 @bot.message_handler(func=lambda message: True)
 def checkKeyWord(message):
     for listNum in range(0,len(keyWordList)-1):
-        if keyWordList[listNum][0] in message.text:
+        messageText = convert(message.text,"zh-cn")
+        if keyWordList[listNum][0] in messageText:
             bot.reply_to(message,keyWordList[listNum][1])
             print("关键字已回复")
 bot.infinity_polling()

@@ -1,8 +1,10 @@
 from telebot import *
+from sqlite3 import *
 from random import randint,choice
 from json import loads
 from requests import get
 from zhconv import convert
+from os import path,makedirs
 token = "在这填上令牌"
 pingList = ["喵喵喵","我还活着……","呜呜呜","挠挠挠","伸爪ing"]
 keyWordList = [
@@ -23,6 +25,15 @@ def word():
     jsonWord = get("https://v1.hitokoto.cn/")
     text = loads(jsonWord.text)
     return text["hitokoto"]+"--"+text["from"]
+#def initTodayLuck():
+#    path = "./database"
+#    if not path.exists(path):
+#        makedirs(path)
+#    db = connect(path+"/todayLuck.db")
+#    c = db.cursor()
+#    c.execute('''CREATE TABLE todayLuck(
+#        user_id luckNum
+#        )''')
 bot = TeleBot(token, parse_mode=None)
 @bot.message_handler(commands=["tosscoin"])
 def send_coin(message):
@@ -43,6 +54,13 @@ def send_ping(message):
 def send_word(message):
     print("有人在看一言喵")
     bot.reply_to(message,word())
+'''
+@bot.message_handler(commands=["todayluck"])
+def todayLuck(message):
+    if not path.exists("./database/todayLuck.db"):
+        initTodayLuck()
+    if message.from_user.username != "Channel_Bot":
+'''
 @bot.message_handler(func=lambda message: True)
 def checkKeyWord(message):
     for listNum in range(0,len(keyWordList)-1):

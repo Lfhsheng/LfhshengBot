@@ -1,8 +1,9 @@
 from telebot import *
 from random import randint,choice
-from json import loads,dumps
+from json import loads,dumps,load
 from requests import get
 from zhconv import convert
+import os
 token = "在这填上令牌"
 pingList = ["喵喵喵","我还活着……","呜呜呜","挠挠挠","伸爪ing"]
 keyWordList = [
@@ -20,6 +21,14 @@ keyWordList = [
     ["泠风寒声酱","谁在叫我（"]
     ]
 botWearskirt = ["机器人没有钱购买裙子qwq","机器人无法女装！"]
+jsonPath = "./wearSkirt.json"
+if not os.path.exists(jsonPath):
+    initDict = {"user":[],"day":[],"count":[]}
+    initJson = dumps(initDict)
+    print(initJson)
+    openInitJson = open(jsonPath,"w")
+    openInitJson.write(initJson)
+    openInitJson.close()
 def word():
     jsonWord = get("https://v1.hitokoto.cn/")
     text = loads(jsonWord.text)
@@ -57,10 +66,44 @@ def wearskirt(message):
     if messagejson["reply_to_message"]["from"]["is_bot"] == True:
         bot.reply_to(message,choice(botWearskirt))
         return None
-    bot.reply_to(message,"%s成功女装！" % replyMessageFirstName)
+    readJson = open(jsonPath,"r")
+    jsonDict = load(readJson)
+    userList = jsonDict["user"]
+    countList = jsonDict["count"]
+    readJson.close()
+    try:
+        index = userList.index(message.from_user.id)
+        countList[index] += 1
+        createJson = {"user":userList,"count":countList}
+        newJson = dumps(createJson)
+        openJson = open(jsonPath,"w")
+        openJson.write(newJson)
+        openJson.close()
+        print(countList[index])
+    except ValueError:
+        userList.append(message.from_user.id)
+        countList.append(1)
+        createJson = {"user":userList,"count":countList}
+        newJson = dumps(createJson)
+        openJson = open(jsonPath,"w")
+        openJson.write(newJson)
+        openJson.close()
+    bot.reply_to(message,"%s成功女装, 次数%d次" % (replyMessageFirstName,countList[index]))
+'''
+@bot.message_handler(commands=["skirtboard"])
+def skirtboard(message):
+    bot.send_chat_action(message.chat.id,'typing')
+    readJson = open(jsonPath,"r")
+    jsonDict = load(readJson)
+    userList = jsonDict["user"]
+    countList = jsonDict["count"]
+    for num in range(0,len(jsonDict)-1):
+        bot.reply_to
+'''
 @bot.message_handler(func=lambda message: True)
 def checkKeyWord(message):
     messagejson = loads(dumps(message.json))
+    print(message.json)
     if messagejson["from"]["is_bot"] == True:
         return None
     for listNum in range(0,len(keyWordList)-1):

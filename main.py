@@ -1,6 +1,6 @@
 from telebot import *
 from random import randint,choice
-from json import loads
+from json import loads,dumps
 from requests import get
 from zhconv import convert
 token = "在这填上令牌"
@@ -19,6 +19,7 @@ keyWordList = [
     ["他妈","他爸"],
     ["泠风寒声酱","谁在叫我（"]
     ]
+botWearskirt = ["机器人没有钱购买裙子qwq","机器人无法女装！"]
 def word():
     jsonWord = get("https://v1.hitokoto.cn/")
     text = loads(jsonWord.text)
@@ -43,8 +44,25 @@ def send_ping(message):
 def send_word(message):
     print("有人在看一言喵")
     bot.reply_to(message,word())
+@bot.message_handler(commands=["wearskirt"])
+def wearskirt(message):
+    bot.send_chat_action(message.chat.id,'typing')
+    messagejson = loads(dumps(message.json))
+    try:
+        messagejson["reply_to_message"]
+    except:
+        bot.reply_to(message,"请使用此命令回复一个人的消息喵！")
+        return None
+    replyMessageFirstName = messagejson["reply_to_message"]["from"]["first_name"]
+    if messagejson["reply_to_message"]["from"]["is_bot"] == True:
+        bot.reply_to(message,choice(botWearskirt))
+        return None
+    bot.reply_to(message,"%s成功女装！" % replyMessageFirstName)
 @bot.message_handler(func=lambda message: True)
 def checkKeyWord(message):
+    messagejson = loads(dumps(message.json))
+    if messagejson["from"]["is_bot"] == True:
+        return None
     for listNum in range(0,len(keyWordList)-1):
         messageText = convert(message.text,"zh-cn")
         if keyWordList[listNum][0] in messageText:

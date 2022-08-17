@@ -12,7 +12,7 @@ pip install zhconv
 ```python
 python main.py
 ```
-记得在`main.py`里填上机器人的令牌😏
+新建`config.py`，复制`config.example.py`里的内容，根据需求修改
 ## 配置自定义词语回复
 按[Python List格式](https://www.w3school.com.cn/python/python_lists.asp)修改`keyWordList`即可。
 ## 一言api
@@ -30,7 +30,7 @@ python main.py
 
 `/wearskirt`：女装一下！
 ## 其他
-可在`main.py`的`pingList`里按[Python List格式](https://www.w3school.com.cn/python/python_lists.asp)修改`ping`随机返回词语
+可在`config.py`的`pingList`里按[Python List格式](https://www.w3school.com.cn/python/python_lists.asp)修改`ping`随机返回词语
 ### Todo
 * 女装龙虎榜
 ### Tip

@@ -25,7 +25,7 @@ jsonPath = "./wearSkirt.json"
 if not os.path.exists(jsonPath):
     initDict = {"user":[],"day":[],"count":[]}
     initJson = dumps(initDict)
-    print(initJson)
+    print("正在生成用于存储女装次数的json")
     openInitJson = open(jsonPath,"w")
     openInitJson.write(initJson)
     openInitJson.close()
@@ -72,38 +72,28 @@ def wearskirt(message):
     countList = jsonDict["count"]
     readJson.close()
     try:
-        index = userList.index(message.from_user.id)
+        index = userList.index(messagejson["reply_to_message"]["from"]["id"])
         countList[index] += 1
         createJson = {"user":userList,"count":countList}
         newJson = dumps(createJson)
         openJson = open(jsonPath,"w")
         openJson.write(newJson)
         openJson.close()
-        print(countList[index])
+        bot.reply_to(message,"%s成功女装, 次数%d次" % (replyMessageFirstName,countList[index]))
+        print("%s成功女装, 次数%d次" % (replyMessageFirstName,countList[index]))
     except ValueError:
-        userList.append(message.from_user.id)
+        userList.append(messagejson["reply_to_message"]["from"]["id"])
         countList.append(1)
         createJson = {"user":userList,"count":countList}
         newJson = dumps(createJson)
         openJson = open(jsonPath,"w")
         openJson.write(newJson)
         openJson.close()
-    bot.reply_to(message,"%s成功女装, 次数%d次" % (replyMessageFirstName,countList[index]))
-'''
-@bot.message_handler(commands=["skirtboard"])
-def skirtboard(message):
-    bot.send_chat_action(message.chat.id,'typing')
-    readJson = open(jsonPath,"r")
-    jsonDict = load(readJson)
-    userList = jsonDict["user"]
-    countList = jsonDict["count"]
-    for num in range(0,len(jsonDict)-1):
-        bot.reply_to
-'''
+        bot.reply_to(message,"%s成功女装, 次数1次" % replyMessageFirstName)
+        print("%s成功女装, 次数1次" % replyMessageFirstName)
 @bot.message_handler(func=lambda message: True)
 def checkKeyWord(message):
     messagejson = loads(dumps(message.json))
-    print(message.json)
     if messagejson["from"]["is_bot"] == True:
         return None
     for listNum in range(0,len(keyWordList)-1):

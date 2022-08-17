@@ -4,23 +4,8 @@ from json import loads,dumps,load
 from requests import get
 from zhconv import convert
 import os
-token = "在这填上令牌"
-pingList = ["喵喵喵","我还活着……","呜呜呜","挠挠挠","伸爪ing"]
-keyWordList = [
-    ["qwq","awa"],
-    ["qaq","quq"],
-    ["ava","qwq"],
-    ["喵","喵！"],
-    ["紫砂","不要！"],
-    ["Emo酱","Emo酱主义万岁！"],
-    ["EMO酱","黄豆酱真好吃😋"],
-    ["咕谷酱","咕咕咕！"],
-    ["泠风寒声","泠风寒声翻车车~"],
-    ["冷风寒声","是泠风寒声！"],
-    ["他妈","他爸"],
-    ["泠风寒声酱","谁在叫我（"]
-    ]
-botWearskirt = ["机器人没有钱购买裙子qwq","机器人无法女装！"]
+from config import *
+
 jsonPath = "./wearSkirt.json"
 if not os.path.exists(jsonPath):
     initDict = {"user":[],"day":[],"count":[]}

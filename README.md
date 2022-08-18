@@ -10,7 +10,7 @@ pip install pyTelegramBotAPI
 pip install zhconv
 ```
 ```python
-python main.py
+sudo python main.py
 ```
 新建`config.py`，复制`config.example.py`里的内容，根据需求修改
 ## 配置自定义词语回复

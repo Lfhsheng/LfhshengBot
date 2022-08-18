@@ -29,6 +29,8 @@ sudo python main.py
 `/word`：随机一言
 
 `/wearskirt`：女装一下！
+
+`/wearskirtboard`：女装龙虎榜
 ## 其他
 可在`config.py`的`pingList`里按[Python List格式](https://www.w3school.com.cn/python/python_lists.asp)修改`ping`随机返回词语
 ### Todo

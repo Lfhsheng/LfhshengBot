@@ -5,10 +5,9 @@ from requests import get
 from zhconv import convert
 import os
 from config import *
-
 jsonPath = "./wearSkirt.json"
 if not os.path.exists(jsonPath):
-    initDict = {"user":[],"day":[],"count":[]}
+    initDict = {"user":[],"count":[],"name":[]}
     initJson = dumps(initDict)
     print("正在生成用于存储女装次数的json")
     openInitJson = open(jsonPath,"w")
@@ -18,7 +17,7 @@ def word():
     jsonWord = get("https://v1.hitokoto.cn/")
     text = loads(jsonWord.text)
     return text["hitokoto"]+"--"+text["from"]
-bot = TeleBot(token, parse_mode=None)
+bot = TeleBot(token,parse_mode="markdown")
 @bot.message_handler(commands=["tosscoin"])
 def send_coin(message):
     print("有人在抛硬币喵")
@@ -55,11 +54,12 @@ def wearskirt(message):
     jsonDict = load(readJson)
     userList = jsonDict["user"]
     countList = jsonDict["count"]
+    nameList = jsonDict["name"]
     readJson.close()
     try:
         index = userList.index(messagejson["reply_to_message"]["from"]["id"])
         countList[index] += 1
-        createJson = {"user":userList,"count":countList}
+        createJson = {"user":userList,"count":countList,"name":nameList}
         newJson = dumps(createJson)
         openJson = open(jsonPath,"w")
         openJson.write(newJson)
@@ -69,13 +69,32 @@ def wearskirt(message):
     except ValueError:
         userList.append(messagejson["reply_to_message"]["from"]["id"])
         countList.append(1)
-        createJson = {"user":userList,"count":countList}
+        nameList.append(replyMessageFirstName)
+        createJson = {"user":userList,"count":countList,"name":nameList}
         newJson = dumps(createJson)
         openJson = open(jsonPath,"w")
         openJson.write(newJson)
         openJson.close()
         bot.reply_to(message,"%s成功女装, 次数1次" % replyMessageFirstName)
         print("%s成功女装, 次数1次" % replyMessageFirstName)
+@bot.message_handler(commands=["wearskirtboard"])
+def wearskirtboard(message):
+    readJson = open(jsonPath,"r")
+    jsonDict = load(readJson)
+    userList = jsonDict["user"]
+    countList = jsonDict["count"]
+    nameList = jsonDict["name"]
+    readJson.close()
+    try:
+        index = userList[0]
+    except:
+        bot.reply_to(message,"没有人女装！")
+        return None
+    totalStr = ""
+    for listNum in range(0,len(userList)):
+        createStr = "[%s](tg://user?id=%d)女装了%d次\n" % (nameList[listNum],userList[listNum],countList[listNum])
+        totalStr += createStr
+    bot.reply_to(message,totalStr)
 @bot.message_handler(func=lambda message: True)
 def checkKeyWord(message):
     messagejson = loads(dumps(message.json))

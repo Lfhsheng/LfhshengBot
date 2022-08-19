@@ -5,9 +5,10 @@ from requests import get
 from zhconv import convert
 import os
 from config import *
+from datetime import datetime
 jsonPath = "./wearSkirt.json"
 if not os.path.exists(jsonPath):
-    initDict = {"user":[],"count":[],"name":[]}
+    initDict = {"user":[],"count":[],"name":[],"time":[]}
     initJson = dumps(initDict)
     print("正在生成用于存储女装次数的json")
     openInitJson = open(jsonPath,"w")
@@ -58,11 +59,31 @@ def wearskirt(message):
     userList = jsonDict["user"]
     countList = jsonDict["count"]
     nameList = jsonDict["name"]
+    timeList = jsonDict["time"]
     readJson.close()
+    try:
+        time = timeList[0]
+        if time != datetime.today().day:
+            os.remove(jsonPath)
+            print("已删除")
+            initDict = {"user":[],"count":[],"name":[],"time":[]}
+            initJson = dumps(initDict)
+            print("正在重新生成用于存储女装次数的json")
+            openInitJson = open(jsonPath,"w")
+            openInitJson.write(initJson)
+            openInitJson.close()
+            userList.clear()
+            countList.clear()
+            nameList.clear()
+            timeList.clear()
+            timeList.append(datetime.today().day)
+    except:
+        timeList.append(datetime.today().day)
+        print("添加日期")
     try:
         index = userList.index(messagejson["reply_to_message"]["from"]["id"])
         countList[index] += 1
-        createJson = {"user":userList,"count":countList,"name":nameList}
+        createJson = {"user":userList,"count":countList,"name":nameList,"time":timeList}
         newJson = dumps(createJson)
         openJson = open(jsonPath,"w")
         openJson.write(newJson)
@@ -73,7 +94,7 @@ def wearskirt(message):
         userList.append(messagejson["reply_to_message"]["from"]["id"])
         countList.append(1)
         nameList.append(replyMessageFirstName)
-        createJson = {"user":userList,"count":countList,"name":nameList}
+        createJson = {"user":userList,"count":countList,"name":nameList,"time":timeList}
         newJson = dumps(createJson)
         openJson = open(jsonPath,"w")
         openJson.write(newJson)

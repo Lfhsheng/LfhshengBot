@@ -46,6 +46,9 @@ def wearskirt(message):
     except:
         bot.reply_to(message,"请使用此命令回复一个人的消息喵！")
         return None
+    if messagejson["reply_to_message"]["from"]["id"] == 777000:
+        bot.reply_to(message,"频道不能女装！")
+        return None
     replyMessageFirstName = messagejson["reply_to_message"]["from"]["first_name"]
     if messagejson["reply_to_message"]["from"]["is_bot"] == True:
         bot.reply_to(message,choice(botWearskirt))

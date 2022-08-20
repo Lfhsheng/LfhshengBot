@@ -18,6 +18,15 @@ def word():
     jsonWord = get("https://v1.hitokoto.cn/")
     text = loads(jsonWord.text)
     return text["hitokoto"]+"--"+text["from"]
+def rank(value):
+    if value == 1:
+        return "🥇"
+    elif value == 2:
+        return "🥈"
+    elif value == 3:
+        return "🥉"
+    else:
+        return "第%d名" % value
 bot = TeleBot(token,parse_mode="markdown")
 @bot.message_handler(commands=["tosscoin"])
 def send_coin(message):
@@ -91,6 +100,8 @@ def wearskirt(message):
         bot.reply_to(message,"%s成功女装, 次数%d次" % (replyMessageFirstName,countList[index]))
         print("%s成功女装, 次数%d次" % (replyMessageFirstName,countList[index]))
     except ValueError:
+        if userList == []:
+            bot.reply_to(message,"早起的人有裙子穿，早起的裙子被人穿。")
         userList.append(messagejson["reply_to_message"]["from"]["id"])
         countList.append(1)
         nameList.append(replyMessageFirstName)
@@ -115,8 +126,9 @@ def wearskirtboard(message):
         bot.reply_to(message,"没有人女装！")
         return None
     totalStr = ""
+    totalStr += "以下为女装时间先后顺序排名，并非次数排名\n"
     for listNum in range(0,len(userList)):
-        createStr = "[%s](tg://user?id=%d)女装了%d次\n" % (nameList[listNum],userList[listNum],countList[listNum])
+        createStr = "%s: [%s](tg://user?id=%d)女装了%d次\n" % (rank(listNum+1),nameList[listNum],userList[listNum],countList[listNum])
         totalStr += createStr
     bot.reply_to(message,totalStr)
 @bot.message_handler(func=lambda message: True)

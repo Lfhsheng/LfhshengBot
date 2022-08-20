@@ -1,7 +1,7 @@
 # 关于这个~~破~~机器人
 实例：**泠风寒声酱！：[@Lfhsheng_bot](https://t.me/Lfhsheng_bot)**
 
-主人：[@Lfhsheng](https://t.me/Lfhsheng)
+主人：[@Lavawiki](https://t.me/Lavawiki)
 
 **欢迎~~调戏~~**
 ## 使用

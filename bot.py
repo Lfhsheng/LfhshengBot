@@ -38,19 +38,19 @@ def send_wearskirt(message):
     cursor = base.cursor()
     data = cursor.execute("SELECT * from WEARSKIRT").fetchall()
     flag = False
-    score = i[2]
     for i in data:
         if id in i:
             flag = True
             if i[3] == str(datetime.date.today()):
                 bot.edit_message_text("你今天已经女装过了", waiting.chat.id, waiting.message_id)
             else:
+                score = i[2]
                 newScore = score + randint(1,10)
                 cursor.execute('''UPDATE WEARSKIRT SET SCORE = %d WHERE ID = %d''' % (newScore,id))
                 base.commit()
                 bot.edit_message_text("女装成功, 你目前有%d女装积分" % newScore, waiting.chat.id, waiting.message_id)
     if flag == False:
-        newScore = score + randint(1,10)
+        newScore = randint(1,10)
         cursor.execute('''INSERT INTO WEARSKIRT (ID,USER,DATETIME,SCORE) VALUES (%d,"%s","%s",%d);''' % (id,user,datetime.date.today(),newScore))
         base.commit()
         bot.edit_message_text("女装成功, 你目前有%d女装积分" % newScore, waiting.chat.id, waiting.message_id)

@@ -63,7 +63,7 @@ def send_wearskirtboard(message):
     data = cursor.execute("SELECT * from WEARSKIRT").fetchall()
     result = ""
     for i in data:
-        result += "[%s](tg://user?id=%d) 有 ``%d`` 女装积分" % (i[1],i[0],i[2])
+        result += "[%s](tg://user?id=%d) 有 ``%d`` 女装积分\n" % (i[1],i[0],i[2])
     try:
         bot.edit_message_text(result,waiting.chat.id,waiting.message_id)
     except:

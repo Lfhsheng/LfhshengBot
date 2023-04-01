@@ -42,18 +42,18 @@ def send_wearskirt(message):
         if id in i:
             flag = True
             if i[3] == str(datetime.date.today()):
-                bot.edit_message_text("你今天已经女装过了", waiting.chat.id, waiting.message_id)
+                bot.edit_message_text("你今天已经女装过了",waiting.chat.id,waiting.message_id)
             else:
                 score = i[2]
                 newScore = score + randint(1,10)
                 cursor.execute('''UPDATE WEARSKIRT SET SCORE = %d WHERE ID = %d''' % (newScore,id))
                 base.commit()
-                bot.edit_message_text("女装成功, 你目前有%d女装积分" % newScore, waiting.chat.id, waiting.message_id)
+                bot.edit_message_text("女装成功, 你目前有%d女装积分" % newScore,waiting.chat.id,waiting.message_id)
     if flag == False:
         newScore = randint(1,10)
         cursor.execute('''INSERT INTO WEARSKIRT (ID,USER,DATETIME,SCORE) VALUES (%d,"%s","%s",%d);''' % (id,user,datetime.date.today(),newScore))
         base.commit()
-        bot.edit_message_text("女装成功, 你目前有%d女装积分" % newScore, waiting.chat.id, waiting.message_id)
+        bot.edit_message_text("女装成功, 你目前有%d女装积分" % newScore,waiting.chat.id,waiting.message_id)
 @bot.message_handler(commands=["wearskirtboard"])
 def send_wearskirtboard(message):
     bot.send_chat_action(message.chat.id,'typing')
@@ -64,8 +64,17 @@ def send_wearskirtboard(message):
     result = ""
     for i in data:
         result += "[%s](tg://user?id=%d) 有 ``%d`` 女装积分" % (i[1],i[0],i[2])
-    bot.edit_message_text(result, waiting.chat.id, waiting.message_id)
+    try:
+        bot.edit_message_text(result,waiting.chat.id,waiting.message_id)
+    except:
+        bot.edit_message_text("目前无人女装（",waiting.chat.id,waiting.message_id)
+''''
 @bot.message_handler(commands=["ban_me"])
 def send_ban_me(message):
-    pass # To Do
+    bot.send_chat_action(message.chat.id,'typing')
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+    bot.restrict_chat_member(chat_id, user_id, can_send_messages=False, until_date=1800)
+    bot.reply_to(message,"你已被禁言半小时||, 冷静一下吧 ~||")
+'''
 bot.infinity_polling()

@@ -24,12 +24,20 @@ if os.path.exists(const.DATA_BASE_PATH) is False:
     sleep(3)
     base = sqlite3.connect(const.DATA_BASE_PATH)
     cursor = base.cursor()
-    cursor.execute(const.INIT_BASE)
+    cursor.execute(const.INIT_WEAR_SKIRT_BASE)
+    cursor.execute(const.INIT_WEAR_SKIRT_RECORD_BASE)
     base.commit()
     base.close()
 with open('./config.yml', 'r') as f:
     config = yaml.load(f.read(), Loader=yaml.FullLoader)
 bot = telebot.TeleBot(config['token'], parse_mode='HTML')
+
+
+def is_admin(user_id):
+    for admin_id in config['admin']:
+        if user_id == admin_id:
+            return True
+    return False
 
 
 @bot.message_handler(commands=['ping'])
@@ -58,18 +66,31 @@ def bot_wear_skirt(message):
 def bot_wear_skirt_board(message):
     bot.send_chat_action(message.chat.id, 'typing')
     waiting = bot.reply_to(message, const.WEAR_SKIRT_BOARD_WAITING)
-    user_id = message.from_user.id
     user_name = message.from_user.first_name
     logger.info(const.LOG_WEARING_SKIRT_BOARD.format(user_name=user_name))
-    for admin_id in config['admin']:
-        if user_id == admin_id:
-            bot.edit_message_text(wear_skirt.wear_skirt_board(),
-                                  waiting.chat.id,
-                                  waiting.message_id)
-            return 114514
-    bot.edit_message_text('只有管理员才能查看女装榜的qwq<tg-spoiler> ,要不让叫管理滥权一下? </tg-spoiler>',
+    bot.edit_message_text(wear_skirt.wear_skirt_board(),
                           waiting.chat.id,
                           waiting.message_id)
+
+
+@bot.message_handler(commands=['record'])
+def bot_wear_skirt_record(message):
+    bot.send_chat_action(message.chat.id, 'typing')
+    waiting = bot.reply_to(message, const.WEAR_SKIRT_RECORD_WAITING)
+    user_id = message.from_user.id
+    if is_admin(user_id):
+        bot.edit_message_text(wear_skirt.wear_skirt_record(message.reply_to_message.text),
+                              waiting.chat.id,
+                              waiting.message_id)
+    else:
+        bot.edit_message_text(const.WEAR_SKIRT_CAN_NOT_RECORD,
+                              waiting.chat.id,
+                              waiting.message_id)
+
+
+@bot.message_handler(commands=['sayings'])
+def bot_wear_skirt_sayings(message):
+    bot.reply_to(message, wear_skirt.wear_skirt_record_choice())
 
 
 if __name__ == '__main__':

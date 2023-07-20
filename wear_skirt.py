@@ -1,6 +1,7 @@
 import sqlite3
 import const
 import datetime
+from random import choice
 
 
 def wear_skirt(user_id, user_name):
@@ -40,3 +41,20 @@ def wear_skirt_board():
     if result == '':
         return const.NOBODY_WEAR_SKIRT
     return result
+
+
+def wear_skirt_record(text):
+    base_connect = sqlite3.connect(const.DATA_BASE_PATH)
+    cursor = base_connect.cursor()
+    cursor.execute(const.WEAR_SKIRT_RECORD_INSERT, (text,))
+    base_connect.commit()
+    return const.WEAR_SKIRT_RECORD_SUCCESS
+
+
+def wear_skirt_record_choice():
+    base_connect = sqlite3.connect(const.DATA_BASE_PATH)
+    wear_skirt_record_text = base_connect.execute('SELECT * FROM WEAR_SKIRT_RECORD').fetchall()
+    if not wear_skirt_record_text:
+        return const.WEAR_SKIRT_SAYINGS_EMPTY
+    else:
+        return choice(wear_skirt_record_text)[0]

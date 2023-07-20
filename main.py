@@ -79,9 +79,14 @@ def bot_wear_skirt_record(message):
     waiting = bot.reply_to(message, const.WEAR_SKIRT_RECORD_WAITING)
     user_id = message.from_user.id
     if is_admin(user_id):
-        bot.edit_message_text(wear_skirt.wear_skirt_record(message.reply_to_message.text),
-                              waiting.chat.id,
-                              waiting.message_id)
+        try:
+            bot.edit_message_text(wear_skirt.wear_skirt_record(message.reply_to_message.text),
+                                  waiting.chat.id,
+                                  waiting.message_id)
+        except AttributeError:
+            bot.edit_message_text(const.WEAR_SKIRT_RECORD_NO_REPLY,
+                                  waiting.chat.id,
+                                  waiting.message_id)
     else:
         bot.edit_message_text(const.WEAR_SKIRT_CAN_NOT_RECORD,
                               waiting.chat.id,

@@ -48,6 +48,7 @@ def wear_skirt_record(text):
     cursor = base_connect.cursor()
     cursor.execute(const.WEAR_SKIRT_RECORD_INSERT, (text,))
     base_connect.commit()
+    base_connect.close()
     return const.WEAR_SKIRT_RECORD_SUCCESS
 
 
@@ -58,3 +59,14 @@ def wear_skirt_record_choice():
         return const.WEAR_SKIRT_SAYINGS_EMPTY
     else:
         return choice(wear_skirt_record_text)[0]
+
+
+def wear_skirt_record_del_all():
+    base_connect = sqlite3.connect(const.DATA_BASE_PATH)
+    cursor = base_connect.cursor()
+    cursor.execute(const.WEAR_SKIRT_SAYINGS_DROP_TABLE)
+    base_connect.commit()
+    cursor.execute(const.INIT_WEAR_SKIRT_RECORD_BASE)
+    base_connect.commit()
+    base_connect.close()
+    return const.WEAR_SKIRT_SAYINGS_DROP_TABLE_SUCCESS

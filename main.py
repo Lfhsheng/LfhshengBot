@@ -98,6 +98,11 @@ def bot_wear_skirt_sayings(message):
     bot.reply_to(message, wear_skirt.wear_skirt_record_choice())
 
 
+@bot.message_handler(commands=['record_del_all'])
+def bot_wear_skirt_sayings_del_all(message):
+    bot.reply_to(message, wear_skirt.wear_skirt_record_del_all())
+
+
 if __name__ == '__main__':
     logger.info(const.START_SUCCESS)
     bot.infinity_polling()
